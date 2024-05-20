@@ -2,7 +2,6 @@
 
 Welcome to the official repository of **grenlan-terminal**! Here we emulate a terminal interface to create an interactive and engaging developer portfolio. 🚀
 
-![Terminal Banner](https://yourimageurl.com/banner.png) <!-- Replace with a terminal-themed banner -->
 
 ## What is grenlan-terminal? 🤔
 
@@ -28,18 +27,19 @@ What things you need to install the software and how to install them:
 A step-by-step series of examples that tell you how to get a development environment running:
 
 ```bash
-git clone https://github.com/yourusername/terminal-emulator-portfolio.git
-cd terminal-emulator-portfolio
+gh repo clone williamzujkowski/grenlan-terminal
+cd grenlan-terminal
 Open index.html in your favorite web browser.
-
-Using grenlan-terminal 🎈
+```
+# Using grenlan-terminal 🎈
 Here’s a quick guide on how to use grenlan-terminal:
 
 Start the Terminal: Open the website to start interacting with the terminal.
 Run Commands: Type commands like help, echo, weather [city], and more to see different outputs.
 Fetch Data: Real-time data fetching for jokes, advice, historical events, and weather.
-Commands Overview 📝
+# Commands Overview 📝
 
+```bash
 # Example command
 $ help
 
@@ -57,21 +57,22 @@ Available commands:
 - userinfo: Display information about the current user.
 - clear: Clear the terminal.
 - exit: Display a message to close the tab.
-Contributing 🤝
+```
+
+# Contributing 🤝
 Feel free to fork this repository, and open a pull request to add more features or resolve bugs. Here's how you can contribute:
 
-Fork it!
-Create your feature branch: git checkout -b my-new-feature
-Commit your changes: git commit -am 'Add some feature'
-Push to the branch: git push origin my-new-feature
-Submit a pull request 🎉
-Credits and Acknowledgments 🙏
+# Fork it!
+- Create your feature branch: git checkout -b my-new-feature
+- Commit your changes: git commit -am 'Add some feature'
+- Push to the branch: git push origin my-new-feature
+- Submit a pull request 🎉
+
+# Credits and Acknowledgments 🙏
 Hat tip to anyone whose code was used
 Inspiration from various open-source projects
-Fun Section 🎮
-Here’s a fun fact about our project or coding in general:
 
-“Did you know that the first computer virus was created in 1983?”
+# Let's Connect! 🌍
+If you loved what you saw here, let's connect! Check out my [github profile](https://github.com/williamzujkowski) for my socials!
 
-Let's Connect! 🌍
-If you loved what you saw here, let's connect! Check out my github profile for my socials!
+ 
