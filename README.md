@@ -1,16 +1,16 @@
-# Project Name: 🚀 Your Amazing Project
+# Project Name: 🖥️ grenlan-terminal
 
-Welcome to the official repository of **Your Amazing Project**! Here we code with passion, imagination, and a touch of magic. 🌟
+Welcome to the official repository of **grenlan-terminal**! Here we emulate a terminal interface to create an interactive and engaging developer portfolio. 🚀
 
-![Fun Banner](https://yourimageurl.com/banner.png) <!-- Replace with a fun, project-related banner or diagram -->
 
-## What is Your Amazing Project? 🤔
+## What is grenlan-terminal? 🤔
 
-Your Amazing Project is a tool/platform/game created to solve [this problem] with a pinch of fun and a lot of code. Here's a little taste of what our project can do:
+The grenlan-terminal is a unique way to present your projects and skills through a terminal-like interface. It simulates a command-line environment, making it an engaging and fun way to showcase your work. Here's a little taste of what our project can do:
 
-- Feature 1 ✨
-- Feature 2 🚀
-- Feature 3 🎩
+- **Command-line Interface** 🌐
+- **Fetch Real-Time Data** 📡
+- **Interactive Commands** 🎮
+- **Responsive Design** 📱
 
 ## Getting Started 🏁
 
@@ -20,44 +20,59 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 What things you need to install the software and how to install them:
 
-```bash
-npm install your-amazing-project
-```
-Installing
-A step by step series of examples that tell you how to get a development env running:
+- Web Browser (Chrome, Firefox, etc.)
+
+### Installing
+
+A step-by-step series of examples that tell you how to get a development environment running:
 
 ```bash
-git clone https://yourgithublink.com/your-amazing-project.git
-cd your-amazing-project
-npm install
-npm start
+gh repo clone williamzujkowski/grenlan-terminal
+cd grenlan-terminal
+Open index.html in your favorite web browser.
 ```
-And voila! You should see the project running at http://localhost:3000.
+# Using grenlan-terminal 🎈
+Here’s a quick guide on how to use grenlan-terminal:
 
-Using Your Amazing Project 🎈
-Here’s a quick guide on how to use Your Amazing Project for doing awesome things. [Add instructions or link to documentation.]
+Start the Terminal: Open the website to start interacting with the terminal.
+Run Commands: Type commands like help, echo, weather [city], and more to see different outputs.
+Fetch Data: Real-time data fetching for jokes, advice, historical events, and weather.
+# Commands Overview 📝
 
-Contributing 🤝
+```bash
+# Example command
+$ help
+
+# Expected output
+Available commands:
+- help: Display available commands and descriptions.
+- date: Display the current date and time.
+- echo [text]: Echo the input text.
+- weather [city]: Fetch and display weather information for a city.
+- joke: Display a random programming joke.
+- advice: Get a piece of advice.
+- bored: Get an activity suggestion to combat boredom.
+- hostname: Display the current hostname.
+- ipinfo: Display IP information.
+- userinfo: Display information about the current user.
+- clear: Clear the terminal.
+- exit: Display a message to close the tab.
+```
+
+# Contributing 🤝
 Feel free to fork this repository, and open a pull request to add more features or resolve bugs. Here's how you can contribute:
 
-Fork it!
-Create your feature branch: git checkout -b my-new-feature
-Commit your changes: git commit -am 'Add some feature'
-Push to the branch: git push origin my-new-feature
-Submit a pull request 🎉
-Credits and Acknowledgments 🙏
+# Fork it!
+- Create your feature branch: git checkout -b my-new-feature
+- Commit your changes: git commit -am 'Add some feature'
+- Push to the branch: git push origin my-new-feature
+- Submit a pull request 🎉
+
+# Credits and Acknowledgments 🙏
 Hat tip to anyone whose code was used
-Inspiration
-etc
-Fun Section 🎮
-Here’s a fun fact about our project or coding in general:
+Inspiration from various open-source projects
 
-“Did you know that the first computer virus was created in 1983?”
+# Let's Connect! 🌍
+If you loved what you saw here, let's connect! Check out my [github profile](https://github.com/williamzujkowski) for my socials!
 
-Let's Connect! 🌍
-If you loved what you saw here, let's connect! You can reach me at:
-
-Your Twitter
-Your LinkedIn
-Your Website
-Made with ❤️ and a lot of ☕ by [Your Name]
+ 
