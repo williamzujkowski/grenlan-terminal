@@ -81,31 +81,13 @@ function displayOutput(command, result) {
         output.appendChild(restContent);
     }
 
-    output.appendChild(document.createElement('br'));
     terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(() => { input.focus(); }, 2000);
+    setTimeout(() => { input.focus(); }, 500); // Adjusted to 500ms for smoother scrolling
 }
 
 // Open a URL in a new tab
 function openLink(url) {
     window.open(url, '_blank');
-}
-
-// Fetch weather information for a given city
-async function handleWeatherCommand(args) {
-    const city = args.join('+');
-    if (!city) {
-        return 'Usage: weather [city]. Example: weather Brussels';
-    }
-
-    try {
-        const response = await fetch(`https://wttr.in/${city}?ATm`);
-        const text = await response.text();
-        return text;
-    } catch (error) {
-        logMessage(`Error fetching weather data for ${city}: ${error.message}`);
-        return `Could not fetch weather data for ${city}.`;
-    }
 }
 
 // Fetch a random programming joke
@@ -129,18 +111,6 @@ async function fetchAdvice() {
     } catch (error) {
         logMessage(`Error fetching advice: ${error.message}`);
         return 'Error fetching advice.';
-    }
-}
-
-// Fetch a random activity suggestion to combat boredom
-async function fetchActivity() {
-    try {
-        const response = await fetch('https://www.boredapi.com/api/activity/');
-        const activity = await response.json();
-        return activity.activity;
-    } catch (error) {
-        logMessage(`Error fetching activity: ${error.message}`);
-        return 'Error fetching activity suggestion.';
     }
 }
 
@@ -206,15 +176,18 @@ async function initializeTerminal() {
         ipData = await ipResponse.json();
         userInfo = user;  // Ensure userInfo is set
         current_user = userInfo.login.username; // Update current user with the username of the user
-        promptText = `${current_user}@${root_url}:~$`; // Update promptText with the current user
-        const { city, region, country } = ipData;
+        currentDirectory = `~`; // Set the current directory to the user's home directory
+        promptText = `${current_user}@${root_url}:${currentDirectory}$`; // Update promptText with the current user
+
+        const location = `${userInfo.location.city}, ${userInfo.location.state}, ${userInfo.location.country}`;
         const timestamp = new Date().toLocaleString();
+
         output.innerHTML += `
-        <div class="line"><span class="prompt">${promptText}</span><pre class="content">[${timestamp}] login detected from ${city}, ${region}, ${country}.</pre></div><br/>
-        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Welcome, ${userInfo.name.first} ${userInfo.name.last}!</pre></div><br/>
-        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Joke: ${joke}</pre></div><br/>
-        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Today in History: ${historyEvent}</pre></div><br/>
-        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Type 'help' to see list of available commands.</pre></div><br/>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">[${timestamp}] login detected from ${location}.</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Welcome, ${userInfo.name.first} ${userInfo.name.last}!</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Joke: ${joke}</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Today in History: ${historyEvent}</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Type 'help' to see list of available commands.</pre></div>
         `;
         terminal.scrollTop = terminal.scrollHeight;
     } catch (error) {
