@@ -1,12 +1,320 @@
-// Configuration file for terminal emulator
+// Summary:
+// This script creates a terminal emulator in a web page that supports various commands,
+// fetches and displays IP information, user information, a programming joke, and a historical event from today's date.
 
-// Placeholder for user information
+// Terminal elements
+const terminal = document.getElementById('terminal');
+const output = document.getElementById('output');
+const input = document.getElementById('input');
+const logElement = document.getElementById('log'); // Log element for debugging
+const banner = document.getElementById('banner');
+
+// Placeholder for IP and history data
+let ipData = null;
+let historyData = null;
 let userInfo = {};
-
-// User and URL information
 let current_user = 'guest'; // Initialize with 'guest', will be updated after fetching user data
 const root_url = 'grenlan.com';
 let promptText = `${current_user}@${root_url}:~$`; // Initialize, will be updated
+
+// Log message to console and log element
+function logMessage(message) {
+    console.log(message);
+    const logEntry = document.createElement('div');
+    logEntry.textContent = message;
+    logElement.appendChild(logEntry);
+}
+
+// Additional functions for dynamic values
+
+// Function to calculate uptime since last boot (April 8th of this year)
+function calculateUptime() {
+    const lastBootDate = new Date(new Date().getFullYear(), 3, 8); // April 8th of this year
+    const now = new Date();
+    const diff = now - lastBootDate;
+    
+    const diffInDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffInHours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const diffInMinutes = Math.floor((diff / (1000 * 60)) % 60);
+    const diffInSeconds = Math.floor((diff / 1000) % 60);
+    
+    return `${diffInDays} days, ${diffInHours} hours, ${diffInMinutes} minutes, ${diffInSeconds} seconds`;
+}
+
+// Function to get random number of users logged in (1 to 41)
+function getRandomUsers() {
+    return Math.floor(Math.random() * 41) + 1;
+}
+
+// Function to generate random memory usage
+function getRandomMemoryUsage() {
+    const totalMemory = 1899; // in MB
+    const usedMemory = Math.floor(Math.random() * totalMemory);
+    const freeMemory = totalMemory - usedMemory;
+    return {
+        used: usedMemory,
+        free: freeMemory,
+        total: totalMemory
+    };
+}
+
+// Function to generate random swap usage
+function getRandomSwapUsage() {
+    const totalSwap = 99; // in MB
+    const usedSwap = Math.floor(Math.random() * totalSwap);
+    const freeSwap = totalSwap - usedSwap;
+    return {
+        used: usedSwap,
+        free: freeSwap,
+        total: totalSwap
+    };
+}
+
+// Function to generate random running processes
+function getRandomRunningProcesses() {
+    return Math.floor(Math.random() * 200) + 50; // between 50 and 250
+}
+
+// Function to generate random load averages
+function getRandomLoadAverages() {
+    const load1 = (Math.random() * 1).toFixed(2);
+    const load5 = (Math.random() * 1).toFixed(2);
+    const load15 = (Math.random() * 1).toFixed(2);
+    return `${load1}, ${load5}, ${load15} (1min, 5mins, 15mins)`;
+}
+
+// Function to dynamically update server statistics
+function updateServerStatistics() {
+    const memoryUsage = getRandomMemoryUsage();
+    const swapUsage = getRandomSwapUsage();
+    const runningProcesses = getRandomRunningProcesses();
+    const loadAverages = getRandomLoadAverages();
+    
+    return `
+        <div class="banner-section">
+            <h2>SERVER STATISTICS</h2>
+            <p>Disk Usage......: 5194M Used, 23347M Free, 29779M Total</p>
+            <p>Memory Usage....: ${memoryUsage.used}M Used, ${memoryUsage.free}M Free, ${memoryUsage.total}M Total</p>
+            <p>Swap Usage......: ${swapUsage.used}M Used, ${swapUsage.free}M Free, ${swapUsage.total}M Total</p>
+            <p>Running Process.: ${runningProcesses}</p>
+            <p>Load Averages...: ${loadAverages}</p>
+        </div>
+    `;
+}
+
+// Display login banner with dynamic server statistics and uptime
+function displayLoginBanner() {
+    const location = `${userInfo.location.city}, ${userInfo.location.state}, ${userInfo.location.country}`;
+    const timestamp = new Date().toLocaleString();
+    const uptime = calculateUptime();
+    const usersLoggedIn = getRandomUsers();
+    const serverStatistics = updateServerStatistics();
+
+    const bannerHTML = `
+        <div class="banner-section">
+            <h2>SERVER INFORMATION</h2>
+            <p>Hostname........: ${root_url}</p>
+            <p>IP Address......: ${ipData.ip}</p>
+            <p>Release.........: Debian GNU/Linux 11 (bullseye)</p>
+            <p>Kernel..........: Linux 6.1.21-v8+</p>
+            <p>CPU.............: Cortex-A72</p>
+        </div>
+        ${serverStatistics}
+        <div class="banner-section">
+            <h2>ACCESS & AVAILABILITY</h2>
+            <p>Uptime..........: ${uptime}</p>
+            <p>Last Boot.......: April 8, ${new Date().getFullYear()}</p>
+            <p>Last Login......: ${location} at ${timestamp}</p>
+            <p>Users Logged on.: ${usersLoggedIn} users (${userInfo.login.username})</p>
+        </div>
+    `;
+    banner.innerHTML = bannerHTML;
+}
+
+// Event listener for handling command input
+input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        const [command, ...args] = input.value.trim().split(' ');
+        processCommand(command.toLowerCase(), args);
+        input.value = '';
+    }
+});
+
+// Ensure the input is focused when the window or body is clicked
+window.addEventListener('focus', () => { input.focus(); });
+document.body.addEventListener('click', () => { input.focus(); });
+
+// Process and execute commands
+async function processCommand(command, args) {
+    if (commands.hasOwnProperty(command)) {
+        try {
+            const result = commands[command](args);
+            if (result instanceof Promise) {
+                result.then((res) => displayOutput(command, res));
+            } else {
+                displayOutput(command, result);
+            }
+        } catch (error) {
+            logMessage(`Error executing command '${command}': ${error.message}`);
+            displayOutput(command, `Error: ${error.message}`);
+        }
+    } else {
+        logMessage(`Command not found: ${command}`);
+        displayOutput(command, 'Command not found');
+    }
+}
+
+// Display command output in the terminal
+function displayOutput(command, result) {
+    const lines = result.split('\n');
+    const firstLine = lines[0];
+    const rest = lines.slice(1).join('\n');
+
+    const outputDiv = document.createElement('div');
+    outputDiv.classList.add('line');
+
+    const promptSpan = document.createElement('span');
+    promptSpan.classList.add('prompt');
+    promptSpan.textContent = promptText;
+
+    const contentSpan = document.createElement('pre');
+    contentSpan.classList.add('content');
+    contentSpan.textContent = firstLine;
+
+    outputDiv.appendChild(promptSpan);
+    outputDiv.appendChild(contentSpan);
+    output.appendChild(outputDiv);
+
+    if (rest) {
+        const restContent = document.createElement('pre');
+        restContent.classList.add('content');
+        restContent.textContent = rest;
+        output.appendChild(restContent);
+    }
+
+    terminal.scrollTop = terminal.scrollHeight;
+    setTimeout(() => { input.focus(); }, 500); // Adjusted to 500ms for smoother scrolling
+}
+
+// Open a URL in a new tab
+function openLink(url) {
+    window.open(url, '_blank');
+}
+
+// Fetch a random programming joke
+async function fetchJoke() {
+    try {
+        const response = await fetch('https://v2.jokeapi.dev/joke/Programming?type=single');
+        const joke = await response.json();
+        return joke.joke;
+    } catch (error) {
+        logMessage(`Error fetching joke: ${error.message}`);
+        return 'Error fetching joke.';
+    }
+}
+
+// Fetch a random piece of advice
+async function fetchAdvice() {
+    try {
+        const response = await fetch('https://api.adviceslip.com/advice');
+        const advice = await response.json();
+        return advice.slip.advice;
+    } catch (error) {
+        logMessage(`Error fetching advice: ${error.message}`);
+        return 'Error fetching advice.';
+    }
+}
+
+// Fetch historical events for today's date
+async function fetchHistory() {
+    try {
+        const response = await fetch('https://history.muffinlabs.com/date');
+        const history = await response.json();
+        historyData = history.data.Events;
+        return getRandomHistoryEvent(historyData);
+    } catch (error) {
+        logMessage(`Error fetching history data: ${error.message}`);
+        return 'Error fetching history data.';
+    }
+}
+
+// Get a random historical event
+function getRandomHistoryEvent(events) {
+    const randomEvent = events[Math.floor(Math.random() * events.length)];
+    return `${randomEvent.year} - ${randomEvent.text}`;
+}
+
+// Fetch random user data
+async function fetchUserData() {
+    try {
+        const response = await fetch('https://randomuser.me/api/?format=PRETTYJson&nat=us,gb,de,fr,mx,ca,nl');
+        const user = await response.json();
+        userInfo = user.results[0];
+        return userInfo;
+    } catch (error) {
+        logMessage(`Error fetching user data: ${error.message}`);
+        return 'Error fetching user data.';
+    }
+}
+
+// Display user information
+function displayUserInfo() {
+    if (userInfo) {
+        return `
+            Name: ${userInfo.name.first} ${userInfo.name.last}
+            Gender: ${userInfo.gender}
+            Email: ${userInfo.email}
+            Location: ${userInfo.location.street.number} ${userInfo.location.street.name}, ${userInfo.location.city}, ${userInfo.location.state}, ${userInfo.location.country}
+            Phone: ${userInfo.phone}
+            Cell: ${userInfo.cell}
+            Nationality: ${userInfo.nat}
+        `;
+    } else {
+        return 'User information not available.';
+    }
+}
+
+// Initialize the terminal with IP information, a joke, and a historical event
+async function initializeTerminal() {
+    try {
+        const [ipResponse, joke, historyEvent, user] = await Promise.all([
+            fetch('https://ipinfo.io?token=d3cd76a02bee5d'),
+            fetchJoke(),
+            fetchHistory(),
+            fetchUserData()
+        ]);
+
+        ipData = await ipResponse.json();
+        userInfo = user;  // Ensure userInfo is set
+        current_user = userInfo.login.username; // Update current user with the username of the user
+        currentDirectory = `~`; // Set the current directory to the user's home directory
+        promptText = `${current_user}@${root_url}:${currentDirectory}$`; // Update promptText with the current user
+
+        displayLoginBanner();
+
+        const location = `${userInfo.location.city}, ${userInfo.location.state}, ${userInfo.location.country}`;
+        const timestamp = new Date().toLocaleString();
+
+        output.innerHTML += `
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">[${timestamp}] login detected from ${location}.</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Welcome, ${userInfo.name.first} ${userInfo.name.last}!</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Joke: ${joke}</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Today in History: ${historyEvent}</pre></div>
+        <div class="line"><span class="prompt">${promptText}</span><pre class="content">Type 'help' to see list of available commands.</pre></div>
+        `;
+
+        terminal.scrollTop = terminal.scrollHeight;
+    } catch (error) {
+        logMessage(`Error initializing terminal: ${error.message}`);
+        output.innerHTML += '<div class="error">Error fetching IP, joke, history, or user information.</div>';
+    }
+
+    input.focus();
+    document.getElementById('prompt').textContent = promptText;
+}
+
+// Fetch data and initialize the terminal when the page loads
+document.addEventListener('DOMContentLoaded', initializeTerminal);
 
 // Command definitions
 const commands = {
@@ -203,4 +511,20 @@ async function handleWeatherCommand(args) {
         logMessage(`Error fetching weather data for ${city}: ${error.message}`);
         return `Could not fetch weather data for ${city}.`;
     }
+}
+
+// Function to handle tab switching
+function openTab(tabName) {
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(tabContent => {
+        tabContent.classList.remove('active');
+    });
+
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(tabButton => {
+        tabButton.classList.remove('active');
+    });
+
+    document.getElementById(tabName).classList.add('active');
+    document.querySelector(`.tab-button[onclick="openTab('${tabName}')"]`).classList.add('active');
 }
