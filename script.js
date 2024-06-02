@@ -1,7 +1,3 @@
-// Summary:
-// This script creates a terminal emulator in a web page that supports various commands,
-// fetches and displays IP information, user information, a programming joke, and a historical event from today's date.
-
 // Terminal elements
 const terminal = document.getElementById('terminal');
 const output = document.getElementById('output');
@@ -32,12 +28,12 @@ function calculateUptime() {
     const lastBootDate = new Date(new Date().getFullYear(), 3, 8); // April 8th of this year
     const now = new Date();
     const diff = now - lastBootDate;
-    
+
     const diffInDays = Math.floor(diff / (1000 * 60 * 60 * 24));
     const diffInHours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const diffInMinutes = Math.floor((diff / (1000 * 60)) % 60);
     const diffInSeconds = Math.floor((diff / 1000) % 60);
-    
+
     return `${diffInDays} days, ${diffInHours} hours, ${diffInMinutes} minutes, ${diffInSeconds} seconds`;
 }
 
@@ -89,7 +85,7 @@ function updateServerStatistics() {
     const swapUsage = getRandomSwapUsage();
     const runningProcesses = getRandomRunningProcesses();
     const loadAverages = getRandomLoadAverages();
-    
+
     return `
         <div class="banner-section">
             <h2>SERVER STATISTICS</h2>
